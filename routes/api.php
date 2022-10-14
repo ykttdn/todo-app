@@ -19,11 +19,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('todos', TodoItemController::class, ['only' => [
-    'index',
-    'store',
-    'show',
-    'edit',
-    'update',
-    'destroy',
-]]);
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::resource('todos', TodoItemController::class, ['only' => [
+        'index',
+        'store',
+        'show',
+        'edit',
+        'update',
+        'destroy',
+    ]]);
+});
