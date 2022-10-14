@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TodoItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TodoItemController extends Controller
 {
@@ -14,7 +15,8 @@ class TodoItemController extends Controller
      */
     public function index()
     {
-        return ['sample1' => '1', 'sample2' => '2'];
+        $todoItems = TodoItem::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+        return $todoItems;
     }
 
     /**
@@ -25,7 +27,15 @@ class TodoItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'item-contents' => 'required|max:100',
+        ]);
+        TodoItem::create([
+            'user_id' => Auth::user()->id,
+            'title' => $request->input('item-contents'),
+            'is_done' => false,
+        ]);
+        return array('success' => true);
     }
 
     /**

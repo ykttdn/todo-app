@@ -26,8 +26,20 @@ function List() {
                     </div>
                 </div>
             </div>
+            <button onClick={() => createPost()}>Send</button>
         </div>
     )
+}
+
+async function createPost() {
+    try {
+        const { data } = await axios.post("/api/todos", {
+            "item-contents": "Hello Sample To Do Item",
+        });
+        console.log("posted.");
+    } catch (err) {
+        console.error(err.response);
+    }
 }
 
 export default List;
